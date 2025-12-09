@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Magic Christmas Reveal</title>
+  
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+  <!-- Babel for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    /* Simple fade-in animation */
+    .animate-fadeIn {
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="bg-black">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function MagicPresentReveal() {
+      const [step, setStep] = useState(0);
+      const [answer, setAnswer] = useState("");
+      const correctAnswer = "snow";
+
+      // Gesture puzzle
+      const [gesture, setGesture] = useState([]);
+      const correctGesture = [1, 2, 3, 6, 9];
+
+      function handleCellTap(id) {
+        if (!gesture.includes(id)) {
+          setGesture([...gesture, id]);
+        }
+      }
+
+      function checkGesture() {
+        if (JSON.stringify(gesture) === JSON.stringify(correctGesture)) {
+          setStep(3);
+        } else {
+          setGesture([]);
+        }
+      }
+
+      return (
+        <div className="min-h-screen bg-gradient-to-b from-purple-900 to-black text-white flex items-center justify-center p-6 text-center">
+          {step === 0 && (
+            <div className="space-y-6 animate-fadeIn">
+              <h1 className="text-3xl font-bold">Welcome to the Enchanted Path</h1>
+              <p className="opacity-80">A magical journey awaits you. Step inside...</p>
+              <button
+                onClick={() => setStep(1)}
+                className="px-6 py-3 bg-purple-600 rounded-2xl shadow-xl active:scale-95"
+              >
+                Enter
+              </button>
+            </div>
+          )}
+
+          {step === 1 && (
+            <div className="space-y-6 animate-fadeIn">
+              <h2 className="text-2xl font-semibold">Riddle of Frost</h2>
+              <p className="opacity-80">
+                "I fall but never break, I cover but never hide. What am I?"
+              </p>
+              <input
+                className="w-full p-3 rounded-xl text-black"
+                placeholder="Type your answer..."
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value.toLowerCase())}
+              />
+              <button
+                onClick={() => answer === correctAnswer && setStep(2)}
+                className="px-6 py-3 bg-purple-600 rounded-2xl shadow-xl active:scale-95"
+              >
+                Submit
+              </button>
+            </div>
+          )}
+
+          {step === 2 && (
+            <div className="space-y-6 animate-fadeIn">
+              <h2 className="text-2xl font-semibold">Mystic Gesture Seal</h2>
+              <p className="opacity-80">Trace the correct magical pattern.</p>
+
+              <div className="grid grid-cols-3 gap-4 w-60 mx-auto">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((id) => (
+                  <div
+                    key={id}
+                    onClick={() => handleCellTap(id)}
+                    className={`aspect-square rounded-xl border-2 flex items-center justify-center text-xl ${
+                      gesture.includes(id)
+                        ? "bg-purple-500 border-purple-300"
+                        : "border-purple-700"
+                    }`}
+                  >
+                    {gesture.includes(id) && gesture.indexOf(id) + 1}
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={checkGesture}
+                className="px-6 py-3 bg-purple-600 rounded-2xl shadow-xl active:scale-95"
+              >
+                Unlock
+              </button>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div className="space-y-6 animate-fadeIn">
+              <h2 className="text-3xl font-bold">Your Gift Awaits 🎁</h2>
+              <p className="opacity-90 text-lg">
+                You have walked the enchanted path with wisdom and grace. Your Christmas
+                present is now revealed...
+              </p>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<MagicPresentReveal />);
+  </script>
+</body>
+</html>
