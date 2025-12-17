@@ -15,6 +15,11 @@
   <!-- Babel for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+  <link
+  href="https://fonts.googleapis.com/css2?family=Nosifer&family=Creepster&display=swap"
+  rel="stylesheet"
+/>
+
   <style>
     /* Simple fade-in animation */
     .animate-fadeIn {
@@ -33,13 +38,18 @@
     const { useState } = React;
 
     function MagicPresentReveal() {
+
       const [step, setStep] = useState(0);
+      const isFestive = step === 0 || step === 1;
+      const isDarkMagic = step >= 2;
       const [answer, setAnswer] = useState("");
-      const correctAnswer = "snow";
+      const correctAnswer = "blackmagic";
 
       // Gesture puzzle
       const [gesture, setGesture] = useState([]);
-      const correctGesture = [1, 2, 3, 6, 9];
+      const correctGesture = [1, 2, 3, 5, 7, 8, 9];
+
+      const [showAnswerInput, setShowAnswerInput] = useState(false);
 
       function handleCellTap(id) {
         if (!gesture.includes(id)) {
@@ -56,45 +66,74 @@
       }
 
       return (
-        <div className="min-h-screen bg-gradient-to-b from-purple-900 to-black text-white flex items-center justify-center p-6 text-center">
+<div
+  className={`min-h-screen flex items-center justify-center p-6 text-center transition-colors duration-700
+    ${
+      isFestive
+        ? "bg-gradient-to-b from-red-700 via-red-800 to-green-900 text-red-100"
+        : "bg-gradient-to-b from-black via-zinc-900 to-purple-950 text-green-200"
+    }
+  `}
+>
+<div
+  className={`w-full ${
+    isDarkMagic ? "font-['Creepster'] tracking-wide" : "font-sans"
+  }`}
+>
           {step === 0 && (
             <div className="space-y-6 animate-fadeIn">
-              <h1 className="text-3xl font-bold">Welcome to the Enchanted Path</h1>
-              <p className="opacity-80">A magical journey awaits you. Step inside...</p>
+              <h1 className="text-3xl font-bold">To gain your True Present, you must use the Christmas Magicks</h1>
+              <p className="opacity-80">Warning: Please use no other sources of magic</p>
               <button
                 onClick={() => setStep(1)}
-                className="px-6 py-3 bg-purple-600 rounded-2xl shadow-xl active:scale-95"
+                className="px-6 py-3 bg-blue-600 rounded-2xl shadow-xl active:scale-95"
               >
-                Enter
+                Enter ...
               </button>
             </div>
           )}
 
-          {step === 1 && (
-            <div className="space-y-6 animate-fadeIn">
-              <h2 className="text-2xl font-semibold">Riddle of Frost</h2>
-              <p className="opacity-80">
-                "I fall but never break, I cover but never hide. What am I?"
-              </p>
-              <input
-                className="w-full p-3 rounded-xl text-black"
-                placeholder="Type your answer..."
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value.toLowerCase())}
-              />
-              <button
-                onClick={() => answer === correctAnswer && setStep(2)}
-                className="px-6 py-3 bg-purple-600 rounded-2xl shadow-xl active:scale-95"
-              >
-                Submit
-              </button>
-            </div>
-          )}
+{step === 1 && (
+  <div className="space-y-6 animate-fadeIn">
+    <h2 className="text-xl font-semibold opacity-80">Answer this riddle and Santa's helper will reveal your present. Make sure you believe in the magic of Christmas when he opens it! </h2>
+
+    <p className="text-2xl font-semibold">
+      “A box without hings, key or lid, yet golden  
+      <span
+        onClick={() => setShowAnswerInput(true)}
+        className="cursor-pointer select-none"
+      >
+        {" "}treasure 
+      </span>{" "}
+       inside is hid. What am I?”
+    </p>
+
+    {showAnswerInput && (
+      <div className="space-y-4 animate-fadeIn">
+        <input
+          className="w-full p-3 rounded-xl text-black"
+          placeholder="Type your answer..."
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value.toLowerCase())}
+        />
+
+        <button
+          onClick={() => answer === correctAnswer && setStep(2)}
+          className="px-6 py-3 bg-purple-600 rounded-2xl shadow-xl active:scale-95"
+        >
+          Submit
+        </button>
+      </div>
+    )}
+  </div>
+)}
+
 
           {step === 2 && (
             <div className="space-y-6 animate-fadeIn">
-              <h2 className="text-2xl font-semibold">Mystic Gesture Seal</h2>
-              <p className="opacity-80">Trace the correct magical pattern.</p>
+              <h2 className="text-3xl font-semibold">Beware, to proceed is to dabble in the black magicks!</h2>
+              <h2 className="text-3xl font-semibold">Trace the Forbidden Gesture</h2>
+              <p className="text-2xl opacity-80">When you say it alound, you may have already fallen into a deep slumber</p>
 
               <div className="grid grid-cols-3 gap-4 w-60 mx-auto">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((id) => (
@@ -123,13 +162,19 @@
 
           {step === 3 && (
             <div className="space-y-6 animate-fadeIn">
-              <h2 className="text-3xl font-bold">Your Gift Awaits 🎁</h2>
+              <h2 className="text-3xl font-bold">Your Gift Awaits...</h2>
               <p className="opacity-90 text-lg">
-                You have walked the enchanted path with wisdom and grace. Your Christmas
-                present is now revealed...
+                Ensure the Box is sealed
+              </p>
+              <p className="opacity-90 text-lg">
+                Perform the Forbidden Gesture with your fingers
+              </p>
+              <p className="opacity-90 text-lg">
+                And loudly chant the Magic Word: SAMT SIRHC
               </p>
             </div>
           )}
+        </div>
         </div>
       );
     }
