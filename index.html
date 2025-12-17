@@ -29,13 +29,35 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Magical transition burst */
+.magic-transition {
+  animation: magicFlash 1s ease-in-out;
+}
+
+@keyframes magicFlash {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+    filter: blur(6px) brightness(1.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: blur(0) brightness(2);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
   </style>
 </head>
 <body class="bg-black">
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState } = React;
+  const { useState, useEffect } = React;
 
     function MagicPresentReveal() {
 
@@ -64,6 +86,23 @@
           setGesture([]);
         }
       }
+
+      useEffect(() => {
+  const festive = document.getElementById("festiveMusic");
+  const ominous = document.getElementById("ominousMusic");
+
+  if (step === 0 || step === 1) {
+    ominous.pause();
+    ominous.currentTime = 0;
+    festive.play().catch(() => {});
+  }
+
+  if (step === 2 || step === 3) {
+    festive.pause();
+    festive.currentTime = 0;
+    ominous.play().catch(() => {});
+  }
+}, [step]);
 
       return (
 <div
@@ -130,7 +169,7 @@
 
 
           {step === 2 && (
-            <div className="space-y-6 animate-fadeIn">
+            <div className="space-y-6 magic-transition">
               <h2 className="text-3xl font-semibold">Beware, to proceed is to dabble in the black magicks!</h2>
               <h2 className="text-3xl font-semibold">Trace the Forbidden Gesture</h2>
               <p className="text-2xl opacity-80">When you say it alound, you may have already fallen into a deep slumber</p>
@@ -170,7 +209,10 @@
                 Perform the Forbidden Gesture with your fingers
               </p>
               <p className="text-2xl">
-                And loudly chant the Magic Word: SAMT SIRHC
+                And loudly chant the Magic Words: 
+              </p>
+                            <p className="text-3xl font-bold">
+                SAMT SIRHC
               </p>
             </div>
           )}
@@ -181,5 +223,13 @@
 
     ReactDOM.createRoot(document.getElementById("root")).render(<MagicPresentReveal />);
   </script>
+
+  <audio id="festiveMusic" loop>
+  <source src="./audio/jingle-bells.mp3" type="audio/mpeg" />
+</audio>
+
+<audio id="ominousMusic" loop>
+  <source src="./audio/ominous.mp3" type="audio/mpeg" />
+</audio>
 </body>
 </html>
