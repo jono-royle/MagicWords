@@ -51,6 +51,20 @@
     filter: brightness(1);
   }
 }
+
+/* Gentle magical tilt */
+.animate-tilt {
+  animation: tilt 3s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes tilt {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(-3deg); }
+  50%  { transform: rotate(0deg); }
+  75%  { transform: rotate(3deg); }
+  100% { transform: rotate(0deg); }
+}
   </style>
 </head>
 <body class="bg-black">
@@ -119,6 +133,25 @@
     isDarkMagic ? "font-['Creepster'] tracking-wide" : "font-sans"
   }`}
 >
+{step === 1 && (
+  <div className="mb-6 flex justify-center animate-fadeIn">
+    <img
+      src="./images/xmasgnomes.png"
+      alt="Festive Magic"
+      className="w-48 animate-tilt select-none pointer-events-none"
+    />
+  </div>
+)}
+
+{step === 3 && (
+  <div className="mb-6 flex justify-center animate-fadeIn">
+    <img
+      src="./images/evilgnomes.png"
+      alt="Dark Ritual"
+      className="w-48 select-none pointer-events-none"
+    />
+  </div>
+)}
           {step === 0 && (
             <div className="space-y-6 animate-fadeIn">
               <h1 className="text-3xl font-bold">To gain your True Present, you must use the Christmas Magicks</h1>
